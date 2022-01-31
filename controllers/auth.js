@@ -71,7 +71,7 @@ const gennerateAcsessToken = (user)=>{
 
 exports.verify = (req, res, next) => {
     const token = req.headers["access-token"];
-
+    console.log("token:"+token)
     if(token) {
         //const accesstoken = token.split(' ')[1];
 
@@ -86,6 +86,7 @@ exports.verify = (req, res, next) => {
         })
     }else{
         res.send("You need token")
+        
     }
 }
 
@@ -255,7 +256,7 @@ exports.dormsAll = (req, res) => {
 exports.rooms = (req, res) => {
 
     const dormId = req.params.id;
-    console.log('help');
+    // console.log('help');
     
 
     //const  {userId,dormId}  = req.body;
@@ -277,7 +278,7 @@ exports.rooms = (req, res) => {
                 
 
             // })
-            res.status(200).json({results})
+            res.status(200).json(results)
         }
 
         })
@@ -299,7 +300,7 @@ exports.dorm = (req, res) => {
                 
 
             // })
-            res.status(200).json({results})
+            res.status(200).json(results)
         }
 
         })
@@ -320,7 +321,7 @@ exports.dorms = (req, res) => {
             //return res.status(404);
 
         }else{
-            res.status(200).json({results})
+            res.status(200).json(results)
         }
         })
 }
@@ -367,7 +368,7 @@ exports.room = (req, res) => {
         })
 }
 
-exports.user_items = (req, res) => {
+exports.user_room = (req, res) => {
 
     const  {userId}  = req.body;
     
@@ -400,11 +401,12 @@ exports.user_items = (req, res) => {
                             //return res.status(404);
                 
                         }else{
-                            res.status(200).json({
+                            
+                            res.status(200).json([{
                                 dorm: dorm[0].name,
                                 room: room[0].roomNum,
                                 haveRoom: true,
-                            })
+                            }])
 
                             
                         }
@@ -416,16 +418,29 @@ exports.user_items = (req, res) => {
 
 
         }else{
-            res.status(200).json({
+            res.status(200).json([{
                 dorm: 'ไม่มีข้อมูลหอพัก',
                 room: 'ไม่มีข้อมูลห้องพัก',
                 haveRoom: false,
-            })
+            }])
 
 
         }
 
         })
+}
+
+exports.isRoom = (req, res) =>{
+    const  {userId}  = req.body;
+    db.query('SELECT * FROM user_in_room WHERE user_id = ? ', [userId], (error, results) => {
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }if(results.length > 0){
+            res.status(200)
+        }
+    })
 }
 
 exports.dropRoom = (req, res) =>{
@@ -454,7 +469,7 @@ exports.dropRoom = (req, res) =>{
                 
                         }else{
         
-                            res.status(200).json({results})
+                            res.status(200).json(results)
                             
                         }
                     })
