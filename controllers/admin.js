@@ -248,3 +248,33 @@ exports.user_pass = (req, res) => {
 
     })
 }
+
+exports.user_fail = (req, res) => {
+
+    const  {roomId}  = req.body;
+    console.log("roomId: "+roomId);
+    
+    //db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
+    // db.query('INSERT INTO `user_in_room` (`user_id`, `dorm_id`, `room_id`) VALUES (?,?,?) ', value, (error, results) => {
+    db.query('UPDATE rooms SET status = 0 WHERE id = ?', [roomId], (error, results) => {
+
+        if(error){
+            console.log(error);
+            //return res.status(404) ;
+
+        }else{
+            db.query('DELETE FROM user_in_room WHERE room_id = ?', [roomId], (error, results) => {
+
+                if(error){
+                    console.log(error);
+                    //return res.status(404) ;
+        
+                }else{
+                    res.status(200).json(results);
+                }
+        
+            })
+        }
+
+    })
+}

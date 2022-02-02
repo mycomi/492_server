@@ -32,7 +32,6 @@ router.get('/admin/IsAuth' ,authAdminController.verify, authAdminController.IsAu
 router.get('/admin/admin_dorm' ,authAdminController.verify, authAdminController.admin_dorm)
 router.post('/admin/getUsers' , authAdminController.getUsers)
 router.post('/admin/user_pass' , authAdminController.user_pass)
-
-
+router.post('/admin/user_fail' , authAdminController.user_fail)
 
 module.exports = router;
