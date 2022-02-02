@@ -29,6 +29,9 @@ router.get('/dropRoom' ,authController.verify,authController.dropRoom)
 router.post('/admin/register', authAdminController.register )
 router.post('/admin/login', authAdminController.login )
 router.get('/admin/IsAuth' ,authAdminController.verify, authAdminController.IsAuth)
+router.get('/admin/admin_dorm' ,authAdminController.verify, authAdminController.admin_dorm)
+router.post('/admin/getUsers' , authAdminController.getUsers)
+router.post('/admin/user_pass' , authAdminController.user_pass)
 
 
 

@@ -172,9 +172,9 @@ exports.login = (req, res) => {
 }
 
 exports.login_line = (req, res) => {
-    //console.log(req.body);
+    //console.log("body"+req.body);
 
-    const { email, password, id } = req.body;
+    const { email, password, line_id } = req.body;
 
     db.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
         if(error){
@@ -201,7 +201,7 @@ exports.login_line = (req, res) => {
                 // );
                 
 
-                db.query('UPDATE users SET line_id = ? WHERE email = ?', [id,email], (error, results) => {
+                db.query('UPDATE users SET line_id = ? WHERE email = ?', [line_id,email], (error, results) => {
                     res.json({
                         name: name,
                         acsessToken
@@ -380,7 +380,7 @@ exports.user_room = (req, res) => {
             console.log(error);
             //return res.status(404);
 
-        }else if(results.length){
+        }else if(results.length > 0){
             // res.status(200).json({
             //     userId: userId,
             //     dormId: dormId,

@@ -112,3 +112,139 @@ exports.login = (req, res) => {
 exports.IsAuth = (req, res) =>{
     return res.status(200).send("User is Auth!!");
 }
+
+exports.admin_dorm = (req, res) => {
+
+    const  {userId}  = req.body;
+    
+    //db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
+    // db.query('INSERT INTO `user_in_room` (`user_id`, `dorm_id`, `room_id`) VALUES (?,?,?) ', value, (error, results) => {
+    db.query('SELECT * FROM admin_of_dorm WHERE admin_id = ?', [userId], (error, results) => {
+        console.log(results);
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }
+        
+        if(results.length > 0){
+            // res.status(200).json({
+            //     userId: userId,
+            //     dormId: dormId,
+            // })
+            console.log(results);
+            const dorm_id = results[0].dorm_id;
+            console.log(dorm_id);
+            db.query('SELECT * FROM dorms WHERE id = ?', [dorm_id], (error, dorm) => {
+                if(error){
+                    console.log(error);
+                    //return res.status(404);
+        
+                }else{
+
+                    res.status(200).json([{
+                        dorm: dorm[0].name,
+                        id: dorm_id,
+                    }])
+
+                }
+            })
+            
+
+
+        }else{
+            res.status(200).json([{
+                dorm: 'ไม่มีข้อมูลหอพัก',
+                id: null,
+            }])
+
+
+        }
+
+    })
+}
+
+exports.getUsers = (req, res) => {
+
+    const  {dormId}  = req.body;
+    console.log("dormId: "+dormId);
+    
+    //db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
+    // db.query('INSERT INTO `user_in_room` (`user_id`, `dorm_id`, `room_id`) VALUES (?,?,?) ', value, (error, results) => {
+    db.query('SELECT * FROM user_in_room WHERE dorm_id = ?', [dormId], (error, results) => {
+        console.log(results);
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }else if(results.length > 0){
+            // res.status(200).json({
+            //     userId: userId,
+            //     dormId: dormId,
+            // })
+            
+            const user_id = results[0].user_id;
+            const room_id = results[0].room_id;
+            // console.log("user_id: "+user_id);
+            
+
+            db.query('SELECT * FROM rooms WHERE id = ?', [room_id], (error, room) => {
+                if(error){
+                    console.log(error);
+                    //return res.status(404);
+        
+                }else{
+                    
+                    db.query('SELECT name FROM users WHERE id = ?', [user_id], (error, user) => {
+                        if(error){
+                            console.log(error);
+                            //return res.status(404);
+                
+                        }else{
+                            
+                            res.status(200).json([{
+                                user: user[0].name,
+                                room: room[0].roomNum,
+                                roomId: room_id,
+                                haveUsers: true,
+                            }])
+        
+                            
+                        }
+                    })
+
+                    
+                }
+            })
+
+
+        }else{
+            res.status(200).json([{
+                haveUsers: false,
+            }])
+
+
+        }
+
+        })
+}
+
+exports.user_pass = (req, res) => {
+
+    const  {roomId}  = req.body;
+    console.log("roomId: "+roomId);
+    
+    //db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
+    // db.query('INSERT INTO `user_in_room` (`user_id`, `dorm_id`, `room_id`) VALUES (?,?,?) ', value, (error, results) => {
+    db.query('UPDATE rooms SET status = 2 WHERE id = ?', [roomId], (error, results) => {
+
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }else{
+            res.status(200).json(results);
+        }
+
+    })
+}
