@@ -401,11 +401,17 @@ exports.user_room = (req, res) => {
                             //return res.status(404);
                 
                         }else{
-                            
+                            let Isconfirm = false;
+                            if(room[0].status == '2'){
+                                Isconfirm = true;
+                            }
+
                             res.status(200).json([{
                                 dorm: dorm[0].name,
                                 room: room[0].roomNum,
                                 haveRoom: true,
+                                Isconfirm : Isconfirm,
+                                
                             }])
 
                             

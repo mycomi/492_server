@@ -206,6 +206,7 @@ exports.getUsers = (req, res) => {
                                 user: user[0].name,
                                 room: room[0].roomNum,
                                 roomId: room_id,
+                                status: room[0].status,
                                 haveUsers: true,
                             }])
         
