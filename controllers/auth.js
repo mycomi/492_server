@@ -306,7 +306,7 @@ exports.dorm = (req, res) => {
         })
 }
 
-exports.dorms = (req, res) => {
+exports.filter = (req, res) => {
 
     const  {lowPrice,highPrice} = req.body;
     
