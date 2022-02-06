@@ -22,6 +22,7 @@ router.get('/dorm/:id' ,authController.rooms)
 router.get('/user_room' ,authController.verify,authController.user_room)
 router.get('/isRoom' ,authController.verify,authController.isRoom)
 router.post('/login_line', authController.login_line )
+router.post('/isLine' ,authController.isLine)
 router.get('/dropRoom' ,authController.verify,authController.dropRoom)
 
 

@@ -171,54 +171,103 @@ exports.login = (req, res) => {
 
 }
 
-exports.login_line = (req, res) => {
-    //console.log("body"+req.body);
+exports.isLine = (req, res) => {
+    const { line_id } = req.body;
 
-    const { email, password, line_id } = req.body;
-
-    db.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
+    console.log(line_id)
+    db.query('SELECT * FROM users WHERE line_id = ?', [line_id], async (error, results) => {
         if(error){
             console.log(error);
             return res.status(404);
 
         }
         if(results.length > 0){
-            console.log(results); 
-            console.log(results[0]);                                
-            const hashedPassword = results[0].password;
+            const name = results[0].name;
+            const acsessToken = gennerateAcsessToken(results[0]);
+            console.log(results);
+            res.json({
+                name: name,
+                acsessToken
+            })
 
-            const verified = await bcrypt.compare(password, hashedPassword);
-
-            if(verified){
-                const name = results[0].name;
-                const acsessToken = gennerateAcsessToken(results[0]);
-                //const refreshToken = gennerateRefreshToken(results[0]);
-                //refreshTokens.push(refreshToken);
-                // const acsessToken = jwt.sign(
-                //     {id: id, name: name, email: email},
-                //     process.env.SECRET_KEY,
-                //     { expiresIn: "10m" }
-                // );
-                
-
-                db.query('UPDATE users SET line_id = ? WHERE email = ?', [line_id,email], (error, results) => {
-                    res.json({
-                        name: name,
-                        acsessToken
-                    })
-                })
-
-                //return res.send('login success!!');
-                
-            }else{
-                return res.status(404).send('Wrong password');
-            }
-
-        }else{                                                          //ไม่มี email นี้
-            return res.status(404).send('no email');
+        }else{
+            return res.status(300).send("error");
         }
+    })
+
+}
+
+
+exports.login_line = (req, res) => {
+    //console.log("body"+req.body);
+
+    const { email, password, line_id } = req.body;
+
+    db.query('SELECT * FROM users WHERE line_id = ?', [line_id], async (error, results) => {
+        if(error){
+            console.log(error);
+            return res.status(404);
+
+        }
+        if(results.length > 0){
+            const name = results[0].name;
+            const acsessToken = gennerateAcsessToken(results[0]);
+            
+            res.json({
+                name: name,
+                acsessToken
+            })
+
+        }else{
+
+            db.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
+                if(error){
+                    console.log(error);
+                    return res.status(404);
         
-    });
+                }
+                if(results.length > 0){
+                    console.log(results); 
+                    console.log(results[0]);                                
+                    const hashedPassword = results[0].password;
+        
+                    const verified = await bcrypt.compare(password, hashedPassword);
+        
+                    if(verified){
+                        const name = results[0].name;
+                        const acsessToken = gennerateAcsessToken(results[0]);
+                        //const refreshToken = gennerateRefreshToken(results[0]);
+                        //refreshTokens.push(refreshToken);
+                        // const acsessToken = jwt.sign(
+                        //     {id: id, name: name, email: email},
+                        //     process.env.SECRET_KEY,
+                        //     { expiresIn: "10m" }
+                        // );
+                        
+        
+                        db.query('UPDATE users SET line_id = ? WHERE email = ?', [line_id,email], (error, results) => {
+                            console.log("line: "+results+","+line_id);
+                            res.json({
+                                name: name,
+                                acsessToken
+                            })
+                        })
+        
+                        //return res.send('login success!!');
+                        
+                    }else{
+                        return res.status(404).send('Wrong password');
+                    }
+        
+                }else{                                                          //ไม่มี email นี้
+                    return res.status(404).send('no email');
+                }
+                
+            });
+
+        }
+
+    })
 
 }
 

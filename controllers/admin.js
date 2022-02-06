@@ -153,10 +153,12 @@ exports.admin_dorm = (req, res) => {
 
 
         }else{
-            res.status(200).json([{
-                dorm: 'ไม่มีข้อมูลหอพัก',
-                id: null,
-            }])
+            // res.status(200).json([{
+            //     dorm: 'ไม่มีข้อมูลหอพัก',
+            //     id: null,
+            // }])
+
+            res.status(200).json(null) 
 
 
         }
