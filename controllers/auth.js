@@ -470,8 +470,6 @@ exports.user_room = (req, res) => {
                 }
             })
             
-
-
         }else{
             res.status(200).json([{
                 dorm: 'ไม่มีข้อมูลหอพัก',

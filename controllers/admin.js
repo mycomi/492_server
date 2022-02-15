@@ -281,3 +281,54 @@ exports.user_fail = (req, res) => {
 
     })
 }
+
+exports.add_dorm = (req, res) => {
+    const {userId,name,floors,rooms,room,price,isPet,isAir} = req.body;
+    // console.log("userId "+JSON.stringify(userId))
+    // console.log("rooms" +JSON.stringify(room))
+    // console.log("rooms" +room[0])
+    // console.log("price" +JSON.stringify(price))
+
+    const lowPrice = Math.min(...price)
+    const highPrice = Math.max(...price)
+
+    const value_dorms = [name,lowPrice,highPrice,isAir,isPet,floors]
+    
+
+    db.query('INSERT INTO `dorms` (`name`, `lowPrice`, `highPrice`,`isAir`, `isPet`, `floor`) VALUES (?,?,?,?,?,?) ', value_dorms, (error, dorms) => {
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }else{
+            console.log("dorms "+dorms.insertId)
+            const dormId = dorms.insertId;
+            const value_admin = [userId,dormId]
+            db.query('INSERT INTO `admin_of_dorm` (`admin_id`, `dorm_id`) VALUES (?,?) ', value_admin, (error, admin) => {
+                if(error){
+                    console.log(error);
+                    //return res.status(404);
+        
+                }else{
+                    
+                    for (let index = 0; index < rooms; index++) {
+
+                        const floor = room[index][0][0];
+                        const value_room = [dormId,floor,room[index],price[index],isAir,0];
+
+                        db.query('INSERT INTO `rooms` (`dorm_id`, `roomFloor`, `roomNum`, `price`, `isAir`, `status`) VALUES (?,?,?,?,?,?) ', value_room, (error, room) => {
+                            if(error){
+                                console.log(error);
+                                //return res.status(404);
+                    
+                            }
+                        })
+                    }
+                    res.status(200).send("success");
+                }
+            })
+        }
+    })
+
+    
+}
