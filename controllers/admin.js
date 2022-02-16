@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+const multer = require('multer')
+
 const db = require('../connect');
 
 const gennerateAcsessToken = (user)=>{
@@ -311,7 +313,7 @@ exports.add_dorm = (req, res) => {
         
                 }else{
                     
-                    for (let index = 0; index < rooms; index++) {
+                    for (let index = 0; index < (rooms*floors); index++) {
 
                         const floor = room[index][0][0];
                         const value_room = [dormId,floor,room[index],price[index],isAir,0];
@@ -332,3 +334,6 @@ exports.add_dorm = (req, res) => {
 
     
 }
+
+
+  

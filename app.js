@@ -40,3 +40,9 @@ db.connect(function(err) {
   console.log("Connected!");
   
 });
+
+// app.use((error, req, res, next) => {
+//   const message = `this is unexpectedError -> "${error.field}" `
+//   console.log(message);
+//   return res.status(500).send(message);
+// })
