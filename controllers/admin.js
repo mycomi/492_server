@@ -286,7 +286,7 @@ exports.user_fail = (req, res) => {
 }
 
 exports.add_dorm = (req, res) => {
-    const {userId,name,floors,rooms,room,price,isPet,isAir,imageUrl} = req.body;
+    const {userId,name,floors,rooms,room,price,isPet,isAir,imageUrl,distance,position} = req.body;
     // console.log("userId "+JSON.stringify(userId))
     // console.log("rooms" +JSON.stringify(room))
     // console.log("rooms" +room[0])
@@ -295,10 +295,13 @@ exports.add_dorm = (req, res) => {
     const lowPrice = Math.min(...price)
     const highPrice = Math.max(...price)
 
-    const value_dorms = [name,lowPrice,highPrice,isAir,isPet,floors,imageUrl]
+    const lat = position.lat;
+    const lng = position.lng; 
+
+    const value_dorms = [name,lowPrice,highPrice,isAir,isPet,floors,imageUrl,distance,lat,lng]
     
 
-    db.query('INSERT INTO `dorms` (`name`, `lowPrice`, `highPrice`,`isAir`, `isPet`, `floor`, `imageUrl`) VALUES (?,?,?,?,?,?,?) ', value_dorms, (error, dorms) => {
+    db.query('INSERT INTO `dorms` (`name`, `lowPrice`, `highPrice`,`isAir`, `isPet`, `floor`, `imageUrl`, `distance`, `lat`, `lng`) VALUES (?,?,?,?,?,?,?,?,?,?) ', value_dorms, (error, dorms) => {
         if(error){
             console.log(error);
             //return res.status(404);
