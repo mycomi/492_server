@@ -35,7 +35,8 @@ router.post('/admin/getUsers' , authAdminController.getUsers)
 router.post('/admin/user_pass' , authAdminController.user_pass)
 router.post('/admin/user_fail' , authAdminController.user_fail)
 router.post('/admin/add_dorm' , authAdminController.verify,authAdminController.add_dorm)
-
+router.post('/admin/admin_rooms' ,authAdminController.admin_rooms)
+router.post('/admin/add_user' ,authAdminController.add_user)
 
 
 module.exports = router;

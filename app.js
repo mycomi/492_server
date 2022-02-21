@@ -35,11 +35,10 @@ app.listen(3000, ()=>{
   console.log("Server on port 3000");
 });
 
-db.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-  
-});
+// db.connect(function(err) {
+//   if (err) throw err;
+//   console.log("Connected!");
+// });
 
 // app.use((error, req, res, next) => {
 //   const message = `this is unexpectedError -> "${error.field}" `

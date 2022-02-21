@@ -93,7 +93,7 @@ exports.verify = (req, res, next) => {
 exports.register = (req, res) => {
     console.log(req.body);
 
-    const { name, email, password } = req.body;
+    const { name, email, password, phone } = req.body;
 
     db.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
         if(error){
@@ -108,7 +108,7 @@ exports.register = (req, res) => {
         let hashedPassword = await bcrypt.hash(password, 8);
         console.log(hashedPassword);
 
-        db.query('INSERT INTO users SET ? ', {name: name , email: email, password: hashedPassword} , (error, results)=>{
+        db.query('INSERT INTO users SET ? ', {name: name , email: email, password: hashedPassword, phone: phone} , (error, results)=>{
             if(error){
                 console.log(error);
                 return res.send("register fail")
@@ -456,6 +456,7 @@ exports.user_room = (req, res) => {
                             }
 
                             res.status(200).json([{
+                                dormId: dorm_id,
                                 dorm: dorm[0].name,
                                 room: room[0].roomNum,
                                 haveRoom: true,
