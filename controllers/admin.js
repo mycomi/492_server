@@ -390,4 +390,63 @@ exports.add_user = (req, res) => {
 }
 
 
-  
+exports.add_photo = (req, res) => {
+
+    //return res.status(200).send("good");
+    // console.log("req.body"+JSON.stringify(req.body))
+    const  {imageUrl,userId}  = req.body;
+    db.query('SELECT dorm_id FROM admin_of_dorm WHERE admin_id = ?', [userId], (error, dorm) => {
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }else{
+            console.log(dorm[0].dorm_id);
+            const dorm_id = dorm[0].dorm_id;
+            db.query('INSERT INTO `photos` (`imageUrl`, `dorm_id`) VALUES (?,?) ', [imageUrl,dorm_id], (error, results) => {
+                if(error){
+                    console.log(error);
+
+                }else{
+                    
+                    res.status(200).send("success");
+                }
+            })
+        }
+    })
+
+}
+
+exports.get_photo = (req, res) => {
+    const  {imageUrl,userId}  = req.body;
+    db.query('SELECT dorm_id FROM admin_of_dorm WHERE admin_id = ?', [userId], (error, dorm) => {
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }else{
+            const dorm_id = dorm[0].dorm_id;
+            db.query('SELECT * FROM photos WHERE dorm_id = ?', [dorm_id], (error, photos) => {
+                if(error){
+                    console.log(error);
+        
+                }else{
+                    res.status(200).json(photos)
+                }
+            })
+        }
+    })
+}
+
+exports.delete_photo = (req, res) => {
+    const  {id}  = req.body;
+    db.query('DELETE FROM photos WHERE id = ?', [id], (error, results) => {
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }else{
+            res.status(200).send('success');
+        }
+    })
+}

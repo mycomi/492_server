@@ -333,6 +333,30 @@ exports.rooms = (req, res) => {
         })
 }
 
+exports.get_photo = (req, res) => {
+
+    const dorm_id = req.params.id;
+    console.log("dorm_id"+dorm_id)
+    db.query('SELECT * FROM photos WHERE dorm_id = ? ',dorm_id, (error, results) => {
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }
+        if(results.length > 0){
+            console.log(results); 
+            console.log(results[0]);  
+                 
+            res.status(200).json(results)
+                //return res.send('login success!!');
+                
+            }else{
+                return res.status(404).send('fail');
+            }
+
+        })
+}
+
 exports.dorm = (req, res) => {
 
     const {dormId} = req.body
