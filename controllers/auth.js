@@ -314,29 +314,26 @@ exports.rooms = (req, res) => {
     //const value = [userId,dormId];
     //db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
     // db.query('INSERT INTO `user_in_room` (`user_id`, `dorm_id`) VALUES (?,?) ', value, (error, results) => {
-    db.query('SELECT * FROM rooms WHERE dorm_id = ? AND status = 0', [dormId], (error, results) => {
+
+    db.query('SELECT * FROM rooms WHERE dorm_id = ? AND status = 0 ORDER BY roomNum ASC;', [dormId], (error, results) => {
         console.log(results);
         if(error){
             console.log(error);
             //return res.status(404);
 
         }else{
-            // res.status(200).json({
-            //     userId: userId,
-            //     dormId: dormId,
-                
-
-            // })
+            
             res.status(200).json(results)
         }
 
-        })
+    })
+    
 }
 
 exports.get_photo = (req, res) => {
 
     const dorm_id = req.params.id;
-    console.log("dorm_id"+dorm_id)
+
     db.query('SELECT * FROM photos WHERE dorm_id = ? ',dorm_id, (error, results) => {
         if(error){
             console.log(error);
@@ -359,9 +356,10 @@ exports.get_photo = (req, res) => {
 
 exports.dorm = (req, res) => {
 
-    const {dormId} = req.body
+    const {dormId} = req.query
+    console.log("dorm "+dormId);
     db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
-        console.log(results);
+        
         if(error){
             console.log(error);
             //return res.status(404);
@@ -482,6 +480,7 @@ exports.user_room = (req, res) => {
                             res.status(200).json([{
                                 dormId: dorm_id,
                                 dorm: dorm[0].name,
+                                image: dorm[0].imageUrl,
                                 room: room[0].roomNum,
                                 haveRoom: true,
                                 Isconfirm : Isconfirm,

@@ -212,7 +212,7 @@ exports.getUsers = (req, res) => {
 
     //db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
     // db.query('INSERT INTO `user_in_room` (`user_id`, `dorm_id`, `room_id`) VALUES (?,?,?) ', value, (error, results) => {
-    db.query(`SELECT rooms.dorm_id, users.name, rooms.roomNum, rooms.id, rooms.status 
+    db.query(`SELECT rooms.dorm_id, users.name, users.phone, rooms.roomNum, rooms.id, rooms.status 
                 FROM user_in_room 
                     INNER JOIN rooms 
                         ON  user_in_room.room_id = rooms.id
