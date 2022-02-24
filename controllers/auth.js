@@ -101,7 +101,7 @@ exports.register = (req, res) => {
             return res.send("register fail")
         }
         if(results.length > 0){                                     //email ซ้ำไหม
-            return res.send("email duplicate")
+            return res.status(400).send("email duplicate")
         }
         
 
@@ -111,12 +111,12 @@ exports.register = (req, res) => {
         db.query('INSERT INTO users SET ? ', {name: name , email: email, password: hashedPassword, phone: phone} , (error, results)=>{
             if(error){
                 console.log(error);
-                return res.send("register fail")
+                return res.status(400).send("register fail")
             } else {
                 console.log(password);
                 console.log(results);
                 //return res.redirect("http://localhost:5000/login");
-                return res.send("success")
+                return res.status(200).send("success")
             }
         });
     });
