@@ -187,7 +187,9 @@ exports.admin_rooms = (req, res) => {
             console.log(error);
             //return res.status(404);
 
-        }else{
+        }
+        
+        if(results.length > 0){
             // res.status(200).json({
             //     userId: userId,
             //     dormId: dormId,
@@ -195,14 +197,40 @@ exports.admin_rooms = (req, res) => {
 
             // })
             res.status(200).json(results)
+        }else{
+            res.status(404).send('not found')
         }
 
         })
 }
 
 
+exports.admin_allRooms = (req, res) => {
 
+    const {dormId} = req.body;
 
+    db.query('SELECT * FROM rooms WHERE dorm_id = ?', [dormId], (error, results) => {
+        console.log(results);
+        if(error){
+            console.log(error);
+            //return res.status(404);
+
+        }
+
+        if(results.length > 0){
+            // res.status(200).json({
+            //     userId: userId,
+            //     dormId: dormId,
+                
+
+            // })
+            res.status(200).json(results)
+        }else{
+            res.status(404).send('not found')
+        }
+
+        })
+}
 
 exports.getUsers = (req, res) => {
 
@@ -212,7 +240,7 @@ exports.getUsers = (req, res) => {
 
     //db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
     // db.query('INSERT INTO `user_in_room` (`user_id`, `dorm_id`, `room_id`) VALUES (?,?,?) ', value, (error, results) => {
-    db.query(`SELECT rooms.dorm_id, users.name, users.phone, rooms.roomNum, rooms.id, rooms.status 
+    db.query(`SELECT rooms.dorm_id, users.name, users.phone, rooms.roomNum, rooms.id, rooms.status, rooms.roomFloor, rooms.price 
                 FROM user_in_room 
                     INNER JOIN rooms 
                         ON  user_in_room.room_id = rooms.id
@@ -356,7 +384,7 @@ exports.add_user = (req, res) => {
     console.log(dormId);
     console.log(roomId);
 
-    const value = [999,dormId,roomId];
+    const value = [1,dormId,roomId];
     //db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
     db.query('INSERT INTO `user_in_room` (`user_id`, `dorm_id`, `room_id`) VALUES (?,?,?) ', value, (error, results) => {
     //db.query('SELECT * FROM rooms WHERE dorm_id = ?', [dormId], (error, results) => {
@@ -450,4 +478,24 @@ exports.delete_photo = (req, res) => {
             res.status(200).send('success');
         }
     })
+}
+
+
+exports.edit_rooms = (req, res) => {
+    const  {id,roomFloor,roomNum,price,isAir}  = req.body;
+    for (let i = 0; i < id.length; i++) {
+         db.query('UPDATE rooms SET roomFloor = ? , roomNum = ? , price = ? , isAir = ? WHERE id = ?', 
+            [roomFloor[i],roomNum[i],price[i],isAir[i], id[i]], (error, results) => {
+
+                if(error){
+                    console.log(error);
+                    //return res.status(404);
+        
+                }
+            }
+        )
+
+    }
+    res.status(200).send('success');
+    
 }

@@ -515,7 +515,9 @@ exports.isRoom = (req, res) =>{
             //return res.status(404);
 
         }if(results.length > 0){
-            res.status(200)
+            res.status(200).send('success')
+        }else{
+            res.status(404).send('no room')
         }
     })
 }
