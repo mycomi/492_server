@@ -144,11 +144,7 @@ exports.admin_dorm = (req, res) => {
         
                 }else{
 
-                    res.status(200).json([{
-                        dorm: dorm[0].name,
-                        id: dorm_id, 
-                        imageUrl: dorm[0].imageUrl,
-                    }])
+                    res.status(200).json(dorm)
 
                 }
             })
@@ -285,7 +281,7 @@ exports.user_pass = (req, res) => {
             //return res.status(404);
 
         }else{
-            res.status(200).json(results);
+            res.status(200).send("success");
         }
 
     })
@@ -312,7 +308,7 @@ exports.user_fail = (req, res) => {
                     //return res.status(404) ;
         
                 }else{
-                    res.status(200).json(results);
+                    res.status(200).send("success");
                 }
         
             })
@@ -322,7 +318,7 @@ exports.user_fail = (req, res) => {
 }
 
 exports.add_dorm = (req, res) => {
-    const {userId,name,phone,floors,rooms,room,price,isPet,isAir,isAirs,imageUrl,distance,position} = req.body;
+    const {userId,name,phone,floors,rooms,room,price,isPet,isAir,isAirs,imageUrl,imageFloorUrl,distance,position} = req.body;
     // console.log("userId "+JSON.stringify(userId))
     // console.log("rooms" +JSON.stringify(room))
     // console.log("rooms" +room[0])
@@ -334,10 +330,10 @@ exports.add_dorm = (req, res) => {
     const lat = position.lat;
     const lng = position.lng; 
 
-    const value_dorms = [name,phone,lowPrice,highPrice,isAir,isPet,floors,imageUrl,distance,lat,lng]
+    const value_dorms = [name,phone,lowPrice,highPrice,isAir,isPet,floors,imageUrl,imageFloorUrl,distance,lat,lng]
     
 
-    db.query('INSERT INTO `dorms` (`name`,`phone`, `lowPrice`, `highPrice`,`isAir`, `isPet`, `floor`, `imageUrl`, `distance`, `lat`, `lng`) VALUES (?,?,?,?,?,?,?,?,?,?,?) ', value_dorms, (error, dorms) => {
+    db.query('INSERT INTO `dorms` (`name`,`phone`, `lowPrice`, `highPrice`,`isAir`, `isPet`, `floor`, `imageUrl`,`imageFloorUrl`, `distance`, `lat`, `lng`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ', value_dorms, (error, dorms) => {
         if(error){
             console.log(error);
             //return res.status(404);

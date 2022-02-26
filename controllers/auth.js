@@ -482,6 +482,7 @@ exports.user_room = (req, res) => {
                                 dorm: dorm[0].name,
                                 image: dorm[0].imageUrl,
                                 room: room[0].roomNum,
+                                price: room[0].price,
                                 haveRoom: true,
                                 Isconfirm : Isconfirm,
                                 
