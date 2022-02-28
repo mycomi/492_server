@@ -177,7 +177,7 @@ exports.admin_rooms = (req, res) => {
     //const value = [userId,dormId];
     //db.query('SELECT * FROM dorms WHERE id = ?', [dormId], (error, results) => {
     // db.query('INSERT INTO `user_in_room` (`user_id`, `dorm_id`) VALUES (?,?) ', value, (error, results) => {
-    db.query('SELECT * FROM rooms WHERE dorm_id = ? AND status = 0', [dormId], (error, results) => {
+    db.query('SELECT * FROM rooms WHERE dorm_id = ? AND status = 0 ORDER BY roomNum', [dormId], (error, results) => {
         console.log(results);
         if(error){
             console.log(error);
@@ -205,7 +205,7 @@ exports.admin_allRooms = (req, res) => {
 
     const {dormId} = req.body;
 
-    db.query('SELECT * FROM rooms WHERE dorm_id = ?', [dormId], (error, results) => {
+    db.query('SELECT * FROM rooms WHERE dorm_id = ? ORDER BY roomNum', [dormId], (error, results) => {
         console.log(results);
         if(error){
             console.log(error);
@@ -242,7 +242,7 @@ exports.getUsers = (req, res) => {
                         ON  user_in_room.room_id = rooms.id
                     INNER JOIN users 
                         ON  user_in_room.user_id = users.id
-                    WHERE user_in_room.dorm_id = ?`, [dormId], async(error, results) => {
+                    WHERE user_in_room.dorm_id = ? ORDER BY roomNum`, [dormId], async(error, results) => {
         
         console.log(results);
         if(error){
